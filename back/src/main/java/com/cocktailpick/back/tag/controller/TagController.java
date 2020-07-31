@@ -3,6 +3,7 @@ package com.cocktailpick.back.tag.controller;
 import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cocktailpick.back.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
 
+@CrossOrigin("*")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/tags")
