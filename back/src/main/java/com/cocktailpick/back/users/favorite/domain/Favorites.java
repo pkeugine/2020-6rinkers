@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
 
+import com.cocktailpick.back.cocktail.domain.Cocktail;
 import com.cocktailpick.back.common.exceptions.ErrorCode;
 import com.cocktailpick.back.common.exceptions.InvalidValueException;
 import lombok.AccessLevel;
@@ -42,5 +43,10 @@ public class Favorites {
 		this.favorites = favorites.stream()
 			.filter(favorite -> !favorite.getCocktail().getId().equals(cocktailId))
 			.collect(Collectors.toList());
+	}
+
+	public boolean isContainCocktail(Cocktail cocktail) {
+		return favorites.stream()
+			.anyMatch(favorite -> favorite.isContainCocktail(cocktail));
 	}
 }

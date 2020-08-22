@@ -26,6 +26,12 @@ import com.cocktailpick.back.cocktail.dto.CocktailResponse;
 import com.cocktailpick.back.cocktail.dto.RecommendRequest;
 import com.cocktailpick.back.cocktail.service.CocktailRecommendService;
 import com.cocktailpick.back.cocktail.service.CocktailService;
+import com.cocktailpick.back.common.exceptions.ResourceNotFoundException;
+import com.cocktailpick.back.security.CurrentUser;
+import com.cocktailpick.back.security.UserPrincipal;
+import com.cocktailpick.back.user.domain.User;
+import com.cocktailpick.back.user.domain.UserRepository;
+import com.cocktailpick.back.users.favorite.domain.Favorites;
 import lombok.RequiredArgsConstructor;
 
 @CrossOrigin("*")
@@ -35,10 +41,18 @@ import lombok.RequiredArgsConstructor;
 public class CocktailController {
 	private final CocktailService cocktailService;
 	private final CocktailRecommendService cocktailRecommendService;
+	private final UserRepository userRepository;
 
 	@GetMapping
-	public ResponseEntity<List<CocktailResponse>> findCocktails() {
-		return ResponseEntity.ok(cocktailService.findAllCocktails());
+	public ResponseEntity<List<CocktailResponse>> findCocktails(@CurrentUser UserPrincipal userPrincipal) {
+		// 칵테일 전체 조회만 예시로 흐름만 대충 만듦
+		User user = userRepository.findById(userPrincipal.getId())
+			.orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+		//로그인 안했을 경우에 대한 처리 생각해야함.
+
+		Favorites favorites = user.getFavorites();
+
+		return ResponseEntity.ok(cocktailService.findAllCocktails(favorites));
 	}
 
 	@GetMapping("/pages")

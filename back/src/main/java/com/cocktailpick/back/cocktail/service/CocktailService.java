@@ -30,6 +30,7 @@ import com.cocktailpick.back.recipe.domain.RecipeItem;
 import com.cocktailpick.back.tag.domain.CocktailTag;
 import com.cocktailpick.back.tag.domain.Tag;
 import com.cocktailpick.back.tag.domain.TagRepository;
+import com.cocktailpick.back.users.favorite.domain.Favorites;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
@@ -41,10 +42,9 @@ public class CocktailService {
 	private final CocktailFindStrategyFactory cocktailFindStrategyFactory;
 
 	@Transactional(readOnly = true)
-	public List<CocktailResponse> findAllCocktails() {
-		return Collections.unmodifiableList(cocktailRepository.findAll().stream()
-			.map(CocktailResponse::of)
-			.collect(Collectors.toList()));
+	public List<CocktailResponse> findAllCocktails(Favorites favorites) {
+		List<Cocktail> all = cocktailRepository.findAll();
+		return Collections.unmodifiableList(CocktailResponse.listOf(all, favorites));
 	}
 
 	@Transactional(readOnly = true)
@@ -52,9 +52,7 @@ public class CocktailService {
 		Pageable pageRequest = PageRequest.of(0, size);
 		List<Cocktail> cocktails = cocktailRepository.findByNameContainingAndIdGreaterThan(contain, id, pageRequest)
 			.getContent();
-		return Collections.unmodifiableList(cocktails.stream()
-			.map(CocktailResponse::of)
-			.collect(Collectors.toList()));
+		return Collections.unmodifiableList(CocktailResponse.listOf(cocktails, Favorites.empty()));
 	}
 
 	@Transactional(readOnly = true)
@@ -165,12 +163,12 @@ public class CocktailService {
 		List<Cocktail> cocktails = cocktailRepository.findAll();
 
 		Cocktail cocktailOfToday = cocktailSearcher.findIn(cocktails);
-		return CocktailResponse.of(cocktailOfToday);
+		return CocktailResponse.of(cocktailOfToday, false);
 	}
 
 	@Transactional(readOnly = true)
 	public List<CocktailResponse> findByNameContaining(String name) {
 		List<Cocktail> cocktailsContainingName = cocktailRepository.findByNameContaining(name);
-		return CocktailResponse.listOf(cocktailsContainingName);
+		return CocktailResponse.listOf(cocktailsContainingName, Favorites.empty());
 	}
 }
