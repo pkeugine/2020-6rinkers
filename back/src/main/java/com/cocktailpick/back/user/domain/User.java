@@ -1,8 +1,7 @@
 package com.cocktailpick.back.user.domain;
 
-import java.util.List;
-
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -14,8 +13,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.security.core.GrantedAuthority;
-
+import com.cocktailpick.back.users.favorite.domain.Favorites;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -53,6 +51,9 @@ public class User {
 	private String providerId;
 
 	private Role role;
+
+	@Embedded
+	private Favorites favorites = Favorites.empty();
 
 	public String getRoleName() {
 		return role.name();
