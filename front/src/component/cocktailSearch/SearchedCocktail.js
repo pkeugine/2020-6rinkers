@@ -8,7 +8,14 @@ const SearchedCocktail = ({ cocktail }) => {
       className="searchedCocktailContainer"
       data-search-cocktail={cocktail.id}
     >
-      <div className="searchedCocktailName">{cocktail.name}</div>
+      <div className="searchedCocktailName">
+        {cocktail.name}
+        {cocktail.isFavorite ? (
+          <img src="/favorite.svg" style={{ width: 20 }} />
+        ) : (
+          <img src="/favorite.svg" style={{ width: 20 }} />
+        )}
+      </div>
       <Link to={`/cocktails/${cocktail.id}`}>
         <div className="searchedCocktailImage">
           <img src={cocktail.imageUrl} alt={cocktail.name} />
