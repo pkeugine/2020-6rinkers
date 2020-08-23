@@ -24,8 +24,8 @@ const CocktailAdmin = ({ role }) => {
     const selectedCocktail = await fetchCocktail(
       e.currentTarget.dataset.cocktailId
     );
-    const inputCocktail = convertCocktailToInputData(selectedCocktail.data);
-    setCocktail(inputCocktail);
+    const noput = convertCocktailToInputData(selectedCocktail.data);
+    setCocktail(noput);
   };
 
   const onResetCocktail = () => {
